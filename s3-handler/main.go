@@ -77,6 +77,14 @@ func Handler(request events.S3Event) (Response, error) {
 				})
 				continue
 			}
+
+			if len(parsedLine) == 0 {
+				logrus.WithField("line", scanner.Text()).
+					Debug("Parsed line is empty. Skipping.")
+				ok = scanner.Scan()
+				continue
+			}
+
 			hnyEvent := libhoney.NewEvent()
 
 			timestamp := httime.GetTimestamp(parsedLine, timeFieldName, timeFieldFormat)
